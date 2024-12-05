@@ -27,7 +27,7 @@ body {
   margin: 10px;
 }
 .reservations_scroll {
-  height: 350px;
+  height: 289px;
   overflow-y: scroll;
 }
 h1 {
@@ -63,6 +63,7 @@ button {
 .ok_button {
   background-color: #28a745;
   color: white;
+  margin-left:5px
 }
 
 .cancel_button {
@@ -104,3 +105,5 @@ button {
 .reservation.show-timeout .timeout-button {
   display: inline-block;
 }
+
+@media (forced-colors: active) { element { forced-color-adjust: none; } }

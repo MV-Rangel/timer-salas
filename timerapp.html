@@ -22,10 +22,13 @@
                 <label for="room">Sala (Número):</label>
                 <input type="text" id="room" name="room" required>
 
-                <label for="reservationTime">Horário da Reserva:</label>
-                <input type="time" id="reservation_time" required>
-
-                <input type="submit" class="ok_button" value="Ok">
+                <div style="display:flex;align-items: baseline;">
+                    <label for="reservationTime" style="flex:2">Horário da Reserva:</label>                
+                <input style="flex:1" type="time" id="reservation_time" required>
+                <input style="flex:1" type="submit" class="ok_button" value="Ok">
+                </div>
+                
+                
 
 
             </form>

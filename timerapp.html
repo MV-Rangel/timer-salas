@@ -23,13 +23,17 @@
                 <label for="reservationTime">Horário da Reserva:</label>
                 <input type="time" id="reservationTime" required>
                 
-                <button type="submit">OK</button>
-                <button type="reset">Cancelar</button>
+                <input type="submit" class="ok_button" value="Ok">
+                
+                
             </form>
+            <button type="submit" class="cancel_button" >Cancelar</button>
         </div>
         <div class="reservations-container">
             <h1>Registros de Reserva</h1>
-            <div id="reservations"></div>
+            <div id="reservations">
+                
+            </div>
         </div>
     </div>
     <script src="script.js"></script>

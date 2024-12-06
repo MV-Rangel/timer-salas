@@ -12,7 +12,7 @@ Um timer regressivo de uma hora inicia, assim que o tempo para começar, termina
 
 Um botão "Tempo Esgotado" surge assim que a contagem regressiva de uma hora terminar.
 
-###todo:
+### todo:
 
-[ ] Criar um banco de dados para armazenar as informações inseridas ao invés do localStorage()
-[ ] Melhorar UI/UX de forma que animações sejam inseridas, melhores cores. Que as informações exibidas sejam claras e entendidas imediatamente.
+- [ ] Criar um banco de dados para armazenar as informações inseridas ao invés do localStorage()
+- [ ] Melhorar UI/UX de forma que animações sejam inseridas, melhores cores. Que as informações exibidas sejam claras e entendidas imediatamente.

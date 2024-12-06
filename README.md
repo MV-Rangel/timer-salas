@@ -1,16 +1,16 @@
 # Timer para agendamento de salas da Biblioteca
 
-O operador insere as informações: Nome do Usuário, Matrícula, Número da Sala, Horário de Reserva.
+O operador insere as seguintes informações: Nome do Usuário, Matrícula, Número da Sala e Horário de Reserva.
 
-Uma reserva é adicionada com esses dados. A reserva é guardada com localStorage(), no momento.
+A reserva é adicionada com esses dados e armazenada usando localStorage().
 
-A reserva também mostra o botão Remover, que remove a reserva da lista e o botão Editar, que permite ao operador editar as informações.
+A reserva exibe dois botões: Remover, que exclui a reserva da lista, e Editar, que permite ao operador modificar as informações.
 
-Um timer verifica o horário que foi feito o agendamento com o horário atual e faz uma contagem regressiva para o tempo que falta para a reserva começar.
+Um temporizador verifica o horário do agendamento em relação ao horário atual e inicia uma contagem regressiva até o início da reserva.
 
-Um timer regressivo de uma hora inicia assim que o tempo para começar termina.
+Após essa contagem regressiva, um cronômetro regressivo de uma hora começa.
 
-Um botão "Tempo Esgotado" surge assim que a contagem regressiva de uma hora terminar.
+Ao término dessa hora, um botão "Tempo Esgotado" aparece.
 
 ### todo:
 

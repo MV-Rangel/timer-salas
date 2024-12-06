@@ -1,6 +1,6 @@
 # Timer para agendamento de salas da Biblioteca
 
-O operador insere as informações: Nome do Usuário, Matrícula, número da sala, horário de reserva.
+O operador insere as informações: Nome do Usuário, Matrícula, Número da Sala, Horário de Reserva.
 
 Uma reserva é adicionada com esses dados. A reserva é guardada com localStorage(), no momento.
 

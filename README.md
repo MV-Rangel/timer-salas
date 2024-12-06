@@ -8,7 +8,7 @@ A reserva também mostra o botão Remover, que remove a reserva da lista e o bot
 
 Um timer verifica o horário que foi feito o agendamento com o horário atual e faz uma contagem regressiva para o tempo que falta para a reserva começar.
 
-Um timer regressivo de uma hora inicia, assim que o tempo para começar, terminar.
+Um timer regressivo de uma hora inicia assim que o tempo para começar termina.
 
 Um botão "Tempo Esgotado" surge assim que a contagem regressiva de uma hora terminar.
 

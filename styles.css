@@ -6,6 +6,7 @@ body {
   align-items: center;
   height: 100vh;
   margin: 0;
+  color: #fff;
 }
 
 .container {
@@ -63,7 +64,7 @@ button {
 .ok_button {
   background-color: #28a745;
   color: white;
-  margin-left:5px
+  margin-left: 5px;
 }
 
 .cancel_button {
@@ -78,8 +79,16 @@ button {
   padding: 10px;
   border-radius: 4px;
   position: relative;
-  display:flex;
-  justify-content: space-between
+  display: flex;
+  justify-content: space-between;
+}
+.reservation_buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.reservation_details{
+  flex:1
 }
 .room_number {
   background-color: rgb(47, 110, 47);
@@ -106,4 +115,8 @@ button {
   display: inline-block;
 }
 
-@media (forced-colors: active) { element { forced-color-adjust: none; } }
+@media (forced-colors: active) {
+  element {
+    forced-color-adjust: none;
+  }
+}

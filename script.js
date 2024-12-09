@@ -1,23 +1,28 @@
 function calculateTimeDifference(reservationTime) {
-  const [selectedHours, selectedMinutes] = reservationTime
-    .split(":")
-    .map(Number);
-
-  const now = new Date();
-  const currentHours = now.getHours();
-  const currentMinutes = now.getMinutes();
-
-  const selectedTimeInMinutes = selectedHours * 60 + selectedMinutes;
-  const currentTimeInMinutes = currentHours * 60 + currentMinutes;
-
-  let timeDifferenceInMinutes = selectedTimeInMinutes - currentTimeInMinutes;
-
-  if (timeDifferenceInMinutes < 0) {
-    timeDifferenceInMinutes += 24 * 60; // Ajusta para o próximo dia
+  if (!reservationTime) return 0;
+  
+  try {
+    const [selectedHours, selectedMinutes] = reservationTime.split(":").map(Number);
+    const now = new Date();
+    const currentHours = now.getHours();
+    const currentMinutes = now.getMinutes();
+    
+    const selectedTimeInMinutes = selectedHours * 60 + selectedMinutes;
+    const currentTimeInMinutes = currentHours * 60 + currentMinutes;
+    
+    let timeDifferenceInMinutes = selectedTimeInMinutes - currentTimeInMinutes;
+    
+    if (timeDifferenceInMinutes < 0) {
+      timeDifferenceInMinutes += 24 * 60;
+    }
+    
+    return timeDifferenceInMinutes * 60;
+  } catch (error) {
+    console.error("Erro ao calcular diferença de tempo:", error);
+    return 0;
   }
-
-  return timeDifferenceInMinutes * 60; // Retorna o tempo em segundos
 }
+
 
 function formatTime(totalSeconds) {
   const minutes = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
@@ -57,7 +62,7 @@ function startCountdown(reservationTime, element, endCountdownElement) {
     if (timeDifferenceInSeconds <= 0) {
       clearInterval(countdownInterval); // Para a contagem regressiva
       displayTime = "00:00";
-      element.innerText = `Reserva começa em: ${displayTime} minutos.`;
+      element.innerText = `Reserva começa em: ${displayTime}.`;
       startEndCountdown(3600, endCountdownElement); // Inicia a contagem regressiva de uma hora
     } else if (timeDifferenceInSeconds < 60) {
       displayTime = `${timeDifferenceInSeconds} segundos`;
@@ -65,7 +70,7 @@ function startCountdown(reservationTime, element, endCountdownElement) {
       displayTime = formatTime(timeDifferenceInSeconds);
     }
 
-    element.innerText = `Reserva começa em: ${displayTime}.`;
+    element.innerText = `Reserva começa em: ${displayTime} minutos.`;
   }
 
   updateCountdown();
@@ -81,7 +86,7 @@ function displayReservation(reservation) {
   detailsDiv.classList.add("reservation_details");
   detailsDiv.innerHTML = `
     <p>Sala ${reservation.room} reservada para ${reservation.studentName} - ${reservation.registration} às ${reservation.reservedTime}.</p>
-    <p class="countdown">Reserva começa em: ${formatTime(calculateTimeDifference(reservation.reservedTime))}.</p>
+    <p class="countdown">Reserva começa em: ${formatTime(calculateTimeDifference(reservation.reservedTime))} minutos.</p>
     <p class="end-countdown">Reserva termina em: 60:00 minutos.</p>
   `;
 
@@ -112,18 +117,43 @@ function displayReservation(reservation) {
   });
 }
 
+// Função para salvar reserva no localStorage
+function saveReservation(reservation) {
+  const allReservations = JSON.parse(localStorage.getItem("reservations")) || [];
+  allReservations.push(reservation);
+  localStorage.setItem("reservations", JSON.stringify(allReservations));
+}
+
+// Função para carregar reservas do localStorage
+function loadReservations() {
+  try {
+    const storedReservations = JSON.parse(localStorage.getItem("reservations")) || [];
+    storedReservations.forEach((reservation) => {
+      if (reservation && reservation.reservedTime) {
+        displayReservation(reservation);
+      }
+    });
+  } catch (error) {
+    console.error("Erro ao carregar reservas:", error);
+    localStorage.removeItem("reservations"); // Limpa dados corrompidos
+  }
+}
+
+// Declare as variáveis no escopo global
+let studentNameInput, registrationInput, roomInput, reservationTimeInput;
+
 const insertReservationOnFormSubmit = () => {
+  // Inicialize as variáveis quando a função é chamada
   const form = document.querySelector("#reservationForm");
-  const studentNameInput = document.querySelector("#student_name");
-  const registrationInput = document.querySelector("#registration");
-  const roomInput = document.querySelector("#room");
-  const reservationTimeInput = document.querySelector("#reservation_time");
+  studentNameInput = document.querySelector("#student_name");
+  registrationInput = document.querySelector("#registration");
+  roomInput = document.querySelector("#room");
+  reservationTimeInput = document.querySelector("#reservation_time");
   const cancelButton = document.querySelector(".cancel_button");
 
-  // No evento submit, chame a função displayReservation
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-
+    
     const newReservation = {
       room: roomInput.value,
       studentName: studentNameInput.value,
@@ -132,11 +162,10 @@ const insertReservationOnFormSubmit = () => {
       timeToStart: calculateTimeDifference(reservationTimeInput.value) * 60,
     };
 
-    // Recuperar reservas existentes ou criar uma nova lista
-    const allReservations =
-      JSON.parse(localStorage.getItem("reservations")) || [];
+    const allReservations = JSON.parse(localStorage.getItem("reservations")) || [];
     allReservations.push(newReservation);
     localStorage.setItem("reservations", JSON.stringify(allReservations));
+    
     displayReservation(newReservation);
     form.reset();
   });
@@ -145,7 +174,10 @@ const insertReservationOnFormSubmit = () => {
     form.reset();
   });
 };
+
+
 // script.js
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const storedReservations =
@@ -154,6 +186,12 @@ document.addEventListener("DOMContentLoaded", () => {
     displayReservation(reservation);
   });
 });
+
+// Modifique o evento DOMContentLoaded
+/*document.addEventListener("DOMContentLoaded", () => {
+  loadReservations();
+  insertReservationOnFormSubmit();
+});*/
 
 // script.js
 document.addEventListener("DOMContentLoaded", function() {
@@ -181,50 +219,65 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-// script.js
 document.addEventListener("DOMContentLoaded", function() {
-  const timeInput = document.getElementById('reservation_time');
+  const timeSelect = document.getElementById('reservation_time');
   const submitBtn = document.getElementById('submitBtn');
 
-  if (timeInput) {
-    function setMinimumTime() {
+  if (timeSelect) {
+    function disablePassedTimes() {
       const now = new Date();
-      const hours = now.getHours().toString().padStart(2, '0');
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      const currentTime = `${hours}:${minutes}`;
-      
-      timeInput.min = currentTime;
+      const currentHour = now.getHours();
+      const currentMinutes = now.getMinutes();
+
+      // Percorre todas as opções do select
+      Array.from(timeSelect.options).forEach(option => {
+        const [hours] = option.value.split(':').map(Number);
+        
+        // Desabilita opções de horários que já passaram
+        if (hours < currentHour || (hours === currentHour && currentMinutes > 0)) {
+          option.disabled = true;
+        } else {
+          option.disabled = false;
+        }
+      });
+
+      // Seleciona automaticamente o próximo horário disponível
+      const firstAvailableOption = Array.from(timeSelect.options).find(option => !option.disabled);
+      if (firstAvailableOption) {
+        timeSelect.value = firstAvailableOption.value;
+      }
     }
 
     function validateTime() {
       const now = new Date();
-      const [selectedHours, selectedMinutes] = timeInput.value.split(":").map(Number);
-      const selectedTime = new Date();
-      selectedTime.setHours(selectedHours, selectedMinutes, 0, 0);
+      const [selectedHours] = timeSelect.value.split(':').map(Number);
+      const currentHour = now.getHours();
 
-      if (selectedTime < now) {
+      if (selectedHours < currentHour) {
         console.log("Por favor, selecione um horário futuro.");
         return false;
       }
       return true;
     }
 
-    // Defina o valor mínimo quando a página é carregada
-    setMinimumTime();
+    // Executa a validação inicial
+    disablePassedTimes();
 
-    // Atualize o valor mínimo a cada minuto para garantir que sempre é um horário futuro
-    setInterval(setMinimumTime, 60000);
+    // Atualiza a cada minuto
+    setInterval(disablePassedTimes, 60000);
 
-    submitBtn.addEventListener("click", () => {
-      if (validateTime()) {
-        // Submeter o formulário ou fazer outras ações se o horário for válido
+    submitBtn.addEventListener("click", (e) => {
+      if (!validateTime()) {
+        e.preventDefault();
+      } else {
         console.log("Horário válido! Submissão bem-sucedida.");
-      } 
+      }
     });
   } else {
-    console.error("Elemento 'time' não encontrado.");
+    console.error("Elemento 'select' não encontrado.");
   }
 });
+
 
 
 
